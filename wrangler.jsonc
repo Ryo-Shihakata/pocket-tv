@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pocket-tv",
+  "account_id": "<your-account-id>",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-07-29",
+  // /api/* だけ Worker を通し、それ以外は静的アセットをそのまま返す
+  "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": ["/api/*"] },
+  // NHK 番組表のキャッシュ。id はデプロイ前に `wrangler kv namespace create EPG` で作って差し替える
+  "kv_namespaces": [{ "binding": "EPG", "id": "00000000000000000000000000000000" }]
+  // 秘密: NHK_API_KEY（本番は `wrangler secret put NHK_API_KEY`、手元は .dev.vars）
+}

@@ -1,0 +1,104 @@
+:root {
+  --bg: #111317;
+  --card: #1b1e24;
+  --line: #2a2e36;
+  --text: #eef0f3;
+  --mute: #9aa1ad;
+  --dim: #6b7280;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+}
+main, .top, .foot { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+
+.top {
+  position: sticky; top: 0; z-index: 2;
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding-top: 14px; padding-bottom: 10px;
+  background: linear-gradient(var(--bg) 75%, transparent);
+}
+.name { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: .02em; }
+.name span { color: #7cc4ff; margin-left: 2px; }
+.clock { font-variant-numeric: tabular-nums; font-size: 22px; font-weight: 700; }
+
+.sec { margin: 18px 0 8px; font-size: 15px; font-weight: 700; color: var(--mute); }
+.sec small { font-weight: 400; color: var(--dim); font-size: 12px; margin-left: 6px; }
+.list { display: grid; gap: 10px; }
+
+.card {
+  --accent: hsl(var(--hue, 210) 70% 62%);
+  position: relative;
+  display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center;
+  padding: 12px 12px 12px 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--accent); }
+.card-head { grid-column: 1 / -1; display: flex; gap: 8px; align-items: baseline; }
+.ch { font-weight: 800; font-size: 15px; color: var(--accent); }
+.aff { font-size: 12px; color: var(--dim); }
+
+.now {
+  all: unset;
+  grid-column: 1; grid-row: 2;
+  display: grid; gap: 2px; min-width: 0;
+  cursor: pointer; border-radius: 8px;
+}
+.now:disabled { cursor: default; }
+.now:focus-visible, .watch:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.now-time { font-size: 12px; color: var(--mute); font-variant-numeric: tabular-nums; }
+.now-time:empty, .now-sub:empty, .next:empty { display: none; }
+.now-title { font-size: 17px; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
+.now-sub {
+  font-size: 13px; color: var(--mute);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.bar { display: block; height: 3px; margin: 6px 0 2px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.bar[hidden] { display: none; }
+.bar i { display: block; height: 100%; width: calc(var(--p, 0) * 100%); background: var(--accent); }
+.next { font-size: 12px; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.now:not(:disabled) .next::after { content: "  ▾ 番組表"; color: var(--mute); }
+.now[aria-expanded="true"] .next::after { content: "  ▴ 閉じる"; }
+
+/* TVer は番組情報を持たないので、局名と「見る」だけの1行にする */
+.card.plain .card-head { grid-column: 1; grid-row: 1 / span 2; align-self: center; flex-direction: column; gap: 0; }
+.card.plain .ch { font-size: 17px; }
+.card.plain .now { display: none; }
+.card.plain .watch { grid-row: 1 / span 2; }
+
+.watch {
+  grid-column: 2; grid-row: 2;
+  align-self: center;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 72px; min-height: 44px; padding: 0 14px;
+  border-radius: 999px;
+  background: var(--accent); color: #0b0d10;
+  font-weight: 800; font-size: 15px; text-decoration: none;
+}
+.watch:active { transform: scale(.97); }
+
+.sched {
+  grid-column: 1 / -1; grid-row: 3; list-style: none; margin: 6px 0 0; padding: 8px 0 0;
+  border-top: 1px solid var(--line);
+  display: grid; gap: 4px; font-size: 14px;
+}
+.sched[hidden] { display: none; }
+.sched li { display: grid; grid-template-columns: 3.2em 1fr; gap: 8px; color: var(--mute); }
+.sched li.on { color: var(--text); font-weight: 700; }
+.sched time { font-variant-numeric: tabular-nums; color: var(--dim); }
+.sched li.on time { color: var(--accent); }
+
+.foot { margin-top: 24px; padding-bottom: 28px; font-size: 12px; color: var(--dim); }
+.foot p { margin: 2px 0; }
+.status { color: #f0b46b; }
+.status:empty { display: none; }
